@@ -13,6 +13,9 @@ var defaultOptions = {
   peerDependencies: true,
   quiet: false,
   npm: 'npm',
+  npmInstall: 'install,
+  npmDev : '--save-dev'
+  npmSave: '--save'
 };
 var erroneous = [];
 
@@ -140,10 +143,10 @@ module.exports.install = function install(deps, options) {
     return;
   }
 
-  var args = ["install"].concat(deps).filter(Boolean);
+  var args = [options.npmInstall].concat(deps).filter(Boolean);
 
   if (module.exports.packageExists()) {
-    args.push(options.dev ? "--save-dev" : "--save");
+    args.push(options.dev ? options.npmDev : options.npmSave);
   }
 
   if (options.quiet) {
@@ -154,6 +157,8 @@ module.exports.install = function install(deps, options) {
     console.info("Installing %s...", dep);
   });
 
+  args = args.filter(function(a){ return a && a.length > 0});
+  
   // Ignore input, capture output, show errors
   var output = spawn.sync(options.npm, args, {
     stdio: ["ignore", "pipe", "inherit"]
