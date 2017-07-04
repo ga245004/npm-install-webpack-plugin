@@ -113,7 +113,7 @@ module.exports.checkBabel = function checkBabel() {
 
       var dep = installThis.check(plugin);
       console.log(dep);
-      if(dep){
+      if(!dep){
         return '';
       }
 
