@@ -24,6 +24,15 @@ function normalizeBabelPlugin(plugin, prefix) {
     if (Array.isArray(plugin)) {
         plugin = plugin[0];
     }
+
+    plugin = plugin.split("/") [0]; //remove relative paths
+    console.log(plugin);
+
+    var dep = this.check(plugin);
+    if(dep){
+      return plugin;
+    }
+
     if (plugin.indexOf(prefix) === 0) {
         return plugin;
     }
@@ -157,7 +166,7 @@ module.exports.install = function install(deps, options) {
     });
 
     args = args.filter(function(a) { return a && a.length > 0 });
-
+    console.log([options.npm].concat(args));
     // Ignore input, capture output, show errors
     var output = spawn.sync(options.npm, args, {
         stdio: ["ignore", "pipe", "inherit"]
