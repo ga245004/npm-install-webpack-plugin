@@ -28,7 +28,7 @@ function normalizeBabelPlugin(plugin, prefix) {
     plugin = plugin.split("/") [0]; //remove relative paths
     console.log(plugin);
 
-    var dep = this.check(plugin);
+    var dep = check(plugin);
     if(dep){
       return plugin;
     }
