@@ -104,16 +104,18 @@ module.exports.checkBabel = function checkBabel() {
     var installThis = this;
 
     // Accumulate babel-core (required for babel-loader)+ all dependencies
-    var deps = ["babel-core"].concat(options.plugins.map(function(plugin) {
+    var deps = ["babel-core"];
+
+    deps.concat(options.plugins.map(function(plugin) {
 
       plugin = plugin.split("/") [0]; //remove relative paths
       console.log(plugin);
 
       var dep = installThis.check(plugin);
+      console.log(dep);
       if(dep){
-        return plugin;
+        return '';
       }
-
 
       return normalizeBabelPlugin(plugin, "babel-plugin-");
 
@@ -125,6 +127,8 @@ module.exports.checkBabel = function checkBabel() {
     })).concat(options.env.development.presets.map(function(preset) {
         return normalizeBabelPlugin(preset, "babel-preset-");
     }));
+
+    deps = deps.filter(function(dep){ return dep && dep.length > 0});
 
     // Check for missing dependencies
     var missing = deps.filter(function(dep) {
