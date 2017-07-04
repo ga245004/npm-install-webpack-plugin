@@ -23,15 +23,7 @@ function normalizeBabelPlugin(plugin, prefix) {
     // Babel plugins can be configured as [plugin, options]
     if (Array.isArray(plugin)) {
         plugin = plugin[0];
-    }
-
-    plugin = plugin.split("/") [0]; //remove relative paths
-    console.log(plugin);
-
-    var dep = check(plugin);
-    if(dep){
-      return plugin;
-    }
+    }    
 
     if (plugin.indexOf(prefix) === 0) {
         return plugin;
@@ -111,7 +103,19 @@ module.exports.checkBabel = function checkBabel() {
 
     // Accumulate babel-core (required for babel-loader)+ all dependencies
     var deps = ["babel-core"].concat(options.plugins.map(function(plugin) {
-        return normalizeBabelPlugin(plugin, "babel-plugin-");
+
+      plugin = plugin.split("/") [0]; //remove relative paths
+      console.log(plugin);
+
+      var dep = this.check(plugin);
+      if(dep){
+        return plugin;
+      }
+
+
+      return normalizeBabelPlugin(plugin, "babel-plugin-");
+
+
     })).concat(options.presets.map(function(preset) {
         return normalizeBabelPlugin(preset, "babel-preset-");
     })).concat(options.env.development.plugins.map(function(plugin) {
