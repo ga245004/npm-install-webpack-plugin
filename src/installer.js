@@ -101,13 +101,15 @@ module.exports.checkBabel = function checkBabel() {
         presets: [],
     }, options.env.development);
 
+    var installThis = this;
+
     // Accumulate babel-core (required for babel-loader)+ all dependencies
     var deps = ["babel-core"].concat(options.plugins.map(function(plugin) {
 
       plugin = plugin.split("/") [0]; //remove relative paths
       console.log(plugin);
 
-      var dep = this.check(plugin);
+      var dep = installThis.check(plugin);
       if(dep){
         return plugin;
       }
